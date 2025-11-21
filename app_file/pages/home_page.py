@@ -2,6 +2,7 @@ import flet as ft
 import requests
 import json
 import asyncio
+import time
 
 # 🔗 GitHub JSON link
 message_url_from_github = "https://raw.githubusercontent.com/Aissaouileith31/school_data3/refs/heads/main/messege.json"
@@ -29,10 +30,13 @@ def home(page: ft.Page, username):
 
 
         try:
-            response = requests.get(message_url_from_github, timeout=5)
+            # Prevent caching on Android
+            url = f"{message_url_from_github}?nocache={int(time.time())}"
+
+            response = requests.get(url, timeout=5)
             if response.status_code == 200:
                 data = json.loads(response.text)
-                # Filter for this user or "all"
+
                 user_msgs = [
                     msg for msg in data
                     if msg.get("receiver") == username or msg.get("receiver") == "all"
@@ -41,16 +45,20 @@ def home(page: ft.Page, username):
             else:
                 print("⚠️ GitHub returned:", response.status_code)
                 return []
+
         except Exception as e:
             print("⚠️ Error loading messages:", e)
             return []
 
     def load_crenau_info():
         try:
-            response = requests.get(crenau_url_from_github, timeout=5)
+            # Prevent caching on Android
+            url = f"{crenau_url_from_github}?nocache={int(time.time())}"
+
+            response = requests.get(url, timeout=5)
             if response.status_code == 200:
                 data = json.loads(response.text)
-                # Filter for this user or "all"
+
                 user_crenau = [
                     inf for inf in data
                     if inf.get("resiver_user") == username
@@ -59,10 +67,10 @@ def home(page: ft.Page, username):
             else:
                 print("⚠️ GitHub returned:", response.status_code)
                 return []
+
         except Exception as e:
             print("⚠️ Error loading messages:", e)
             return []
-        
 #__________________________________________________________________
 #__________________________________________________________________
 #__________________________________________________________________
@@ -70,16 +78,8 @@ def home(page: ft.Page, username):
 #__________________________________________________________________
     
         
-        #for now using it localy after using github as server
     
         
-
-
-#__________________________________________________________________
-#__________________________________________________________________
-#__________________________________________________________________
-#__________________________________________________________________
-#__________________________________________________________________
     # 🔹 Build UI
     def build_ui():
         page.clean()
