@@ -10,24 +10,28 @@ import time
 password_login_student_drive_url ="https://raw.githubusercontent.com/Aissaouileith31/school_data3/refs/heads/main/user.json"
 
 def check_login(username,password):
+    url = f"{password_login_student_drive_url}?nocache={int(time.time())}"
 
-
- 
     try:
-        response = requests.get(password_login_student_drive_url , timeout=5)
+        response = requests.get(url, timeout=5)
         if response.status_code != 200:
             print("⚠️ Could not fetch data from Drive")
             return False
+
         data = json.loads(response.text)
-        
+
     except Exception as e:
         print("❌ Error fetching data:", e)
         return False
 
+    # Make sure "students" is a list
     for s in data.get("students", []):
-        if s["username"].lower() == username.lower():
-            hashed = s["mp"].encode()
+        if s.get("username", "").lower() == username.lower():
+            hashed = s.get("mp", "").encode()
+
+            # Check if password matches hash
             return bcrypt.checkpw(password.encode(), hashed)
+
     return False
 
 
