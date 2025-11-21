@@ -34,4 +34,5 @@ def main_location(page: ft.Page):
 
 
 
-ft.app(target=main_location ,view=ft.WEB_BROWSER, port=8000)
+
+ft.app(target=main_location, assets_dir="assets/")
