@@ -13,7 +13,7 @@ VERSION_URL = "https://raw.githubusercontent.com/Aissaouileith31/school_data3/re
 
 
 def home(page: ft.Page):
-    version = "1.1"
+    version = "1.2"
     user_name = page.client_storage.get("username") or "User"
     user_id = page.client_storage.get("user_id") or "0000"
     page.title = "Archemede Dashboard"
@@ -325,3 +325,4 @@ def home(page: ft.Page):
     page.add(tabs)
     check_version()
     fetch_data() # Initial load
+
